@@ -1,8 +1,5 @@
 extends Node2D
 
-# class member variables go here, for example:
-# var a = 2
-# var b = "textvar"
 var screenSize
 var blockSize
 var playerSize
@@ -13,6 +10,8 @@ var player
 
 func _ready():
 	screenSize = get_viewport_rect().size
+	
+	# Create blocks
 	blockSize = Vector2(screenSize.x, 120)
 	var blockColor = Color(0.69, 0.09, 0.12)
 	var blockPols = Vector2Array()
@@ -20,18 +19,19 @@ func _ready():
 	blockPols.append(Vector2(blockSize.x, 0))
 	blockPols.append(Vector2(blockSize.x, blockSize.y))
 	blockPols.append(Vector2(0, blockSize.y))
-
+	# Create top block
 	blockTop = Polygon2D.new()
 	blockTop.set_polygon(blockPols)
 	blockTop.set_color(blockColor)
 	add_child(blockTop);
-	
+	# Create bottom block
 	blockBottom = Polygon2D.new()
 	blockBottom.set_polygon(blockPols);
 	blockBottom.set_color(blockColor)
 	blockBottom.set_pos(Vector2(0, screenSize.y - blockSize.y))
 	add_child(blockBottom);
 	
+	# Create player
 	var playerColor = Color(0.10, 0.10, 0.44)
 	playerSize = Vector2(80, 80)
 	var playerPols = Vector2Array()
