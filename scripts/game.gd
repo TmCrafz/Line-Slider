@@ -67,8 +67,4 @@ func _ready():
 	set_process(true)
 	
 func _process(delta):
-	Vector2(0, 0)
-#	var playerPos = player.get_pos()
-#	playerPos.y += delta * 100.0
-#	player.set_pos(playerPos)
-#	player.move_and_slide(Vector2(0, delta * 1000.0))
+	player.move(Vector2(0, delta * 100.0))
