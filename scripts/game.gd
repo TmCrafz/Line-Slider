@@ -76,4 +76,4 @@ func _process(delta):
 func _fixed_process(delta):
 #	player.move(Vector2(playerHorSpeed * delta, delta * 100.0))
 #	player.move(Vector2(0, delta * 100.0))
-	player.move(Vector2(playerHorSpeed * delta))
+	player.move(Vector2(playerHorSpeed * delta, 0))
