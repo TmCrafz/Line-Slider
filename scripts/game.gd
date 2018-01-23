@@ -3,6 +3,8 @@ extends Node2D
 var screenSize
 var blockSize
 var playerSize
+# Horizontal speed of player
+var playerHorSpeed
 
 var blockTop
 var blockBottom
@@ -10,7 +12,7 @@ var player
 
 func _ready():
 	screenSize = get_viewport_rect().size
-	
+	playerHorSpeed = 60.0
 	# Create blocks
 	blockSize = Vector2(screenSize.x, 120)
 	var blockColor = Color(0.69, 0.09, 0.12)
@@ -65,6 +67,13 @@ func _ready():
 	player.add_shape(collisionPlayer)
 	player.set_pos(Vector2(0, 300))
 	set_process(true)
+	set_fixed_process(true)
 	
 func _process(delta):
-	player.move(Vector2(0, delta * 100.0))
+	pass
+	
+	
+func _fixed_process(delta):
+#	player.move(Vector2(playerHorSpeed * delta, delta * 100.0))
+#	player.move(Vector2(0, delta * 100.0))
+	player.move(Vector2(playerHorSpeed * delta))
