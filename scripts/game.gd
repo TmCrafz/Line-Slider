@@ -39,8 +39,8 @@ func _ready():
 	var blockBottomShape = get_node("WallBottom/Shape")
 	blockBottomShape.set_polygon(blockPols)
 	blockBottomShape.set_color(blockColor)
-	var collisionPolygonBottom = RectangleShape2D.new()
-	collisionPolygonBottom.set_extents(blockSize / 2.0)
+	var collisionPolygonBottom = ConvexPolygonShape2D.new()
+	collisionPolygonBottom.set_points(blockPols)
 	blockBottom.add_shape(collisionPolygonBottom)
 	blockBottom.set_pos(Vector2(screenSize.x - blockSize.x / 2.0, screenSize.y - blockSize.y / 2.0))
 	
@@ -59,7 +59,7 @@ func _ready():
 	var collisionPlayer = RectangleShape2D.new()
 	collisionPlayer.set_extents(Vector2(playerSize.x / 2.0, playerSize.y / 2.0))
 	player.add_shape(collisionPlayer)
-	player.set_pos(Vector2(0, 300))
+	player.set_pos(Vector2(screenSize.x / 4.0, screenSize.y / 2.0))
 	set_process(true)
 	set_fixed_process(true)
 	
@@ -71,8 +71,11 @@ func _process(delta):
 	
 	
 func _fixed_process(delta):
-#	player.move(Vector2(playerHorSpeed * delta, delta * 100.0))
-#	player.move(Vector2(0, delta * 100.0))
-	player.move(Vector2(playerDirection.x * playerSpeed.x * delta, playerDirection.y * playerSpeed.y * delta))
-#	if (player.is_colliding()):
-#		player.set_pos(player.get_collision_pos())
+	var motion = Vector2(0, 0)
+	motion.x = playerDirection.x * playerSpeed.x * delta
+	motion.y = playerDirection.y * playerSpeed.y * delta
+	player.move(motion)
+	if (player.is_colliding()):
+		var colNormal = player.get_collision_normal()
+		motion = colNormal.slide(motion)
+		player.move(motion)
