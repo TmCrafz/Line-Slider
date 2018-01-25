@@ -10,6 +10,7 @@ var playerDirection
 var blockTop
 var blockBottom
 var player
+var camera
 
 func _ready():
 	screenSize = get_viewport_rect().size
@@ -63,11 +64,18 @@ func _ready():
 	set_process(true)
 	set_fixed_process(true)
 	
+	camera = get_node("Camera")
+	camera.set_pos(screenSize / 2.0)
+	
 func _process(delta):
 	if (Input.is_action_pressed("move_down")):
 		playerDirection.y = 1.0
 	elif(Input.is_action_pressed("move_up")):
 		playerDirection.y = -1.0
+		
+	# Update camera
+	var camera = get_node("Camera")
+	#camera.set_pos(Vector2(player.get_pos().x, camera.get_pos().y))
 	
 	
 func _fixed_process(delta):
