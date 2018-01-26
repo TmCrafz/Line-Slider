@@ -10,7 +10,7 @@ var camera
 
 func _ready():
 	screenSize = get_viewport_rect().size
-	
+	player = get_node("Player")
 	# Create blocks
 	blockSize = Vector2(screenSize.x, 120)
 	var blockColor = Color(0.69, 0.09, 0.12)
@@ -41,15 +41,17 @@ func _ready():
 	wallBottom.set_pos(Vector2(screenSize.x - blockSize.x / 2.0, screenSize.y - blockSize.y / 2.0))
 	
 	camera = get_node("Camera")
-	camera.set_pos(screenSize / 2.0)
+	camera.set_pos(Vector2(player.get_pos().x, screenSize.y / 2.0))
 	
 	set_process(true)
 	set_fixed_process(true)
 	
 func _process(delta):
+	print("Player pos: " + str(player.get_pos()))
 	# Update camera
-	var camera = get_node("Camera")
-	#camera.set_pos(Vector2(player.get_pos().x, camera.get_pos().y))
+#	camera.set_pos(player.get_pos())
+#	camera.set_pos(Vector2(800, camera.get_pos().y))
+	pass
 	
 	
 func _fixed_process(delta):

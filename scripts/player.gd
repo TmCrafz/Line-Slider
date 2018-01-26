@@ -9,7 +9,7 @@ func _ready():
 	var screenSize = get_viewport_rect().size
 	
 	
-	playerSpeed = Vector2(60.0, 360.0)
+	playerSpeed = Vector2(180.0, 900.0)
 	playerDirection = Vector2(1.0, 0.0)
 	var playerColor = Color(0.10, 0.10, 0.44)
 	playerSize = Vector2(80, 80)
