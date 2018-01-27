@@ -6,7 +6,6 @@ var blockSize
 var wallTop
 var wallBottom
 var player
-var camera
 
 func _ready():
 	screenSize = get_viewport_rect().size
@@ -40,19 +39,20 @@ func _ready():
 	wallBottom.add_shape(collisionPolygonBottom)
 	wallBottom.set_pos(Vector2(screenSize.x - blockSize.x / 2.0, screenSize.y - blockSize.y / 2.0))
 	
-	camera = get_node("Camera")
-	camera.set_pos(Vector2(player.get_pos().x, screenSize.y / 2.0))
-	
 	set_process(true)
 	set_fixed_process(true)
 	
 func _process(delta):
-	print("Player pos: " + str(player.get_pos()))
-	# Update camera
-#	camera.set_pos(player.get_pos())
-#	camera.set_pos(Vector2(800, camera.get_pos().y))
+	updateCamera()	
 	pass
-	
-	
+
 func _fixed_process(delta):
+	pass
+
+func updateCamera():
+#	print("updateCamera")
+	var canvasTransform = get_viewport().get_canvas_transform()
+	# The movement is inverted, like its like sliding a paper under a camera when modifying canvas transform 
+	canvasTransform[2].x = -player.get_pos().x + screenSize.x / 2.0
+	get_viewport().set_canvas_transform(canvasTransform)
 	pass

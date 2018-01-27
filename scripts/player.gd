@@ -1,5 +1,7 @@
 extends KinematicBody2D
 
+signal move
+
 var playerSize
 
 var playerSpeed
@@ -45,5 +47,6 @@ func _fixed_process(delta):
 		var colNormal = get_collision_normal()
 		motion = colNormal.slide(motion)
 		move(motion)
+		emit_signal("move")
 
 
