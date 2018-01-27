@@ -44,12 +44,22 @@ func _process(delta):
 
 func _fixed_process(delta):
 	updateCamera()
+	if isBlockSpawnNecessary():
+		blockColor.r = (randf()*11+1) / 10.0
+		blockColor.g = (randf()*11+1) / 10.0
+		blockColor.b = (randf()*11+1) / 10.0
+		removeBlocks()
+		createTopBlock()
+		createBottomBlock()
+		print("Spawn necessary")
 	pass
 
-# Remove the block which is most left
-func removeBlock():
-	var wallNodes = get_node("WallTop").get_children()
-	wallTop.remove_child(wallNodes[0])
+# Remove the blocks which are most left
+func removeBlocks():
+	var wallNodesTop = wallTop.get_children()
+	wallTop.remove_child(wallNodesTop[0])
+	var wallNodesBottom = wallBottom.get_children()
+	wallBottom.remove_child(wallNodesBottom[0])
 	pass
 
 func createTopBlock():
@@ -92,6 +102,16 @@ func createBlock(startPos, wall):
 	collisionPolygon.set_points(blockPolsC)
 	wall.add_shape(collisionPolygon)
 	pass
+
+func isBlockSpawnNecessary():
+	var wallNodes = get_node("WallTop").get_children()
+	if (wallNodes.empty()):
+		return false
+	var center = wallNodes.size() / 2 - 1
+	var pos = wallNodes[center].get_pos().x + blockSize.x / 2.0
+	if player.get_pos().x > pos:
+		return true
+	return false
 
 func updateCamera():
 #	print("updateCamera")
