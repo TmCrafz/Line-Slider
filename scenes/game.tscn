@@ -27,20 +27,6 @@ constant_angular_velocity = 0.0
 friction = 1.0
 bounce = 0.0
 
-[node name="Shape" type="Polygon2D" parent="WallBottom"]
-
-polygon = Vector2Array(  )
-uv = Vector2Array(  )
-color = Color( 1, 1, 1, 1 )
-vertex_colors = ColorArray(  )
-offset = Vector2( 0, 0 )
-texture/texture = null
-texture/offset = Vector2( 0, 0 )
-texture/scale = Vector2( 1, 1 )
-texture/rotation = 0.0
-invert/enable = false
-invert/border = 100.0
-
 [node name="Player" type="KinematicBody2D" parent="."]
 
 editor/display_folded = true

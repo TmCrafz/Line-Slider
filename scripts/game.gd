@@ -17,13 +17,15 @@ func _ready():
 	#var blockColor = Color(0.69, 0.89, 0.12)
 	# Create top block
 	wallTop = get_node("WallTop")
-	wallTop.set_pos(Vector2(blockSize.x / 2.0, blockSize.y / 2.0))
-	for i in range(10):
-		blockColor.r += 0.10 * i
-		blockColor.g += 0.10 * i
-		blockColor.b += 0.10 * i
-		createBlock()
-	
+	wallBottom = get_node("WallBottom")
+	wallTop.set_pos(Vector2(0, blockSize.y / 2.0))
+	wallBottom.set_pos(Vector2(0, screenSize.y - blockSize.y / 2.0))
+	for i in range(8):
+		blockColor.r = (randf()*11+1) / 10.0
+		blockColor.g = (randf()*11+1) / 10.0
+		blockColor.b = (randf()*11+1) / 10.0
+		createTopBlock()
+		createBottomBlock()
 #	# Create bottom block
 #	wallBottom = get_node("WallBottom");
 #	var wallBottomShape = get_node("WallBottom/Shape")
@@ -38,10 +40,10 @@ func _ready():
 	set_fixed_process(true)
 	
 func _process(delta):
-	updateCamera()
 	pass
 
 func _fixed_process(delta):
+	updateCamera()
 	pass
 
 # Remove the block which is most left
@@ -50,32 +52,45 @@ func removeBlock():
 	wallTop.remove_child(wallNodes[0])
 	pass
 
-func createBlock():
+func createTopBlock():
 	var wallNodes = get_node("WallTop").get_children()
-	var startPos = Vector2(blockSize.x, 0)
+	var startPos = Vector2(0, 0)
 	if !wallNodes.empty():
 		var lastWallNode = wallNodes.back()
-		startPos.x += lastWallNode.get_pos().x
-	var blockPolsT = Vector2Array()
-	blockPolsT.append(Vector2(-blockSize.x / 2.0, -blockSize.y / 2.0))
-	blockPolsT.append(Vector2(blockSize.x / 2.0, -blockSize.y / 2.0))
-	blockPolsT.append(Vector2(blockSize.x / 2.0, blockSize.y / 2.0))
-	blockPolsT.append(Vector2(-blockSize.x / 2.0, blockSize.y / 2.0))
+		startPos.x += lastWallNode.get_pos().x + blockSize.x
+	createBlock(startPos, wallTop)
+	pass
+
+func createBottomBlock():
+	var wallNodes = get_node("WallBottom").get_children()
+	var startPos = Vector2(0, 0)
+	if !wallNodes.empty():
+		var lastWallNode = wallNodes.back()
+		startPos.x += lastWallNode.get_pos().x + blockSize.x
+	createBlock(startPos, wallBottom)
+	pass
+
+func createBlock(startPos, wall):
+	var blockPols = Vector2Array()
+	blockPols.append(Vector2(-blockSize.x / 2.0, -blockSize.y / 2.0))
+	blockPols.append(Vector2(blockSize.x / 2.0, -blockSize.y / 2.0))
+	blockPols.append(Vector2(blockSize.x / 2.0, blockSize.y / 2.0))
+	blockPols.append(Vector2(-blockSize.x / 2.0, blockSize.y / 2.0))
 	
-	var wallTopShape = Polygon2D.new()
-	wallTopShape.set_pos(Vector2(startPos.x, startPos.y))
-	wallTop.add_child(wallTopShape)
-	wallTopShape.set_polygon(blockPolsT)
-	wallTopShape.set_color(blockColor)
+	var wallShape = Polygon2D.new()
+	wallShape.set_pos(Vector2(startPos.x, 0))
+	wall.add_child(wallShape)
+	wallShape.set_polygon(blockPols)
+	wallShape.set_color(blockColor)
 	# Collision
 	var blockPolsC = Vector2Array()
-	blockPolsT.append(Vector2(-blockSize.x / 2.0 + startPos.x, -blockSize.y / 2.0))
-	blockPolsT.append(Vector2(blockSize.x / 2.0 + startPos.x, -blockSize.y / 2.0))
-	blockPolsT.append(Vector2(blockSize.x / 2.0 + startPos.x, blockSize.y / 2.0))
-	blockPolsT.append(Vector2(-blockSize.x / 2.0 + startPos.x, blockSize.y / 2.0))
-	var collisionPolygonTop = ConvexPolygonShape2D.new()
-	collisionPolygonTop.set_points(blockPolsT)
-	wallTop.add_shape(collisionPolygonTop)
+	blockPolsC.append(Vector2(-blockSize.x / 2.0 + startPos.x, -blockSize.y / 2.0))
+	blockPolsC.append(Vector2(blockSize.x / 2.0 + startPos.x, -blockSize.y / 2.0))
+	blockPolsC.append(Vector2(blockSize.x / 2.0 + startPos.x, blockSize.y / 2.0))
+	blockPolsC.append(Vector2(-blockSize.x / 2.0 + startPos.x, blockSize.y / 2.0))
+	var collisionPolygon = ConvexPolygonShape2D.new()
+	collisionPolygon.set_points(blockPolsC)
+	wall.add_shape(collisionPolygon)
 	pass
 
 func updateCamera():
