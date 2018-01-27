@@ -1,7 +1,5 @@
 extends KinematicBody2D
 
-signal move
-
 var playerSize
 
 var playerSpeed
@@ -9,7 +7,6 @@ var playerDirection
 
 func _ready():
 	var screenSize = get_viewport_rect().size
-	
 	
 	playerSpeed = Vector2(180.0, 900.0)
 	playerDirection = Vector2(1.0, 0.0)
@@ -47,6 +44,5 @@ func _fixed_process(delta):
 		var colNormal = get_collision_normal()
 		motion = colNormal.slide(motion)
 		move(motion)
-		emit_signal("move")
 
 

@@ -2,6 +2,7 @@ extends Node2D
 
 var screenSize
 var blockSize
+var blockColor
 
 var wallTop
 var wallBottom
@@ -10,34 +11,28 @@ var player
 func _ready():
 	screenSize = get_viewport_rect().size
 	player = get_node("Player")
-	# Create blocks
-	blockSize = Vector2(screenSize.x, 120)
-	var blockColor = Color(0.69, 0.09, 0.12)
+	
+	blockSize = Vector2(120, 120)
+	blockColor = Color(0.69, 0.09, 0.12)
 	#var blockColor = Color(0.69, 0.89, 0.12)
-	var blockPols = Vector2Array()
-	blockPols.append(Vector2(-blockSize.x / 2.0, -blockSize.y / 2.0))
-	blockPols.append(Vector2(blockSize.x / 2.0, -blockSize.y / 2.0))
-	blockPols.append(Vector2(blockSize.x / 2.0, blockSize.y / 2.0))
-	blockPols.append(Vector2(-blockSize.x / 2.0, blockSize.y / 2.0))
 	# Create top block
 	wallTop = get_node("WallTop")
 	wallTop.set_pos(Vector2(blockSize.x / 2.0, blockSize.y / 2.0))
-	var wallTopShape = get_node("WallTop/Shape")
-	wallTopShape.set_polygon(blockPols)
-	wallTopShape.set_color(blockColor)
-	var collisionPolygonTop = ConvexPolygonShape2D.new()
-	collisionPolygonTop.set_points(blockPols)
+	for i in range(10):
+		blockColor.r += 0.10 * i
+		blockColor.g += 0.10 * i
+		blockColor.b += 0.10 * i
+		createBlock()
 	
-	wallTop.add_shape(collisionPolygonTop)
 #	# Create bottom block
-	wallBottom = get_node("WallBottom");
-	var wallBottomShape = get_node("WallBottom/Shape")
-	wallBottomShape.set_polygon(blockPols)
-	wallBottomShape.set_color(blockColor)
-	var collisionPolygonBottom = ConvexPolygonShape2D.new()
-	collisionPolygonBottom.set_points(blockPols)
-	wallBottom.add_shape(collisionPolygonBottom)
-	wallBottom.set_pos(Vector2(screenSize.x - blockSize.x / 2.0, screenSize.y - blockSize.y / 2.0))
+#	wallBottom = get_node("WallBottom");
+#	var wallBottomShape = get_node("WallBottom/Shape")
+#	wallBottomShape.set_polygon(blockPols)
+#	wallBottomShape.set_color(blockColor)
+#	var collisionPolygonBottom = ConvexPolygonShape2D.new()
+#	collisionPolygonBottom.set_points(blockPols)
+#	wallBottom.add_shape(collisionPolygonBottom)
+#	wallBottom.set_pos(Vector2(screenSize.x - blockSize.x / 2.0, screenSize.y - blockSize.y / 2.0))
 	
 	set_process(true)
 	set_fixed_process(true)
@@ -47,6 +42,40 @@ func _process(delta):
 	pass
 
 func _fixed_process(delta):
+	pass
+
+# Remove the block which is most left
+func removeBlock():
+	var wallNodes = get_node("WallTop").get_children()
+	wallTop.remove_child(wallNodes[0])
+	pass
+
+func createBlock():
+	var wallNodes = get_node("WallTop").get_children()
+	var startPos = Vector2(blockSize.x, 0)
+	if !wallNodes.empty():
+		var lastWallNode = wallNodes.back()
+		startPos.x += lastWallNode.get_pos().x
+	var blockPolsT = Vector2Array()
+	blockPolsT.append(Vector2(-blockSize.x / 2.0, -blockSize.y / 2.0))
+	blockPolsT.append(Vector2(blockSize.x / 2.0, -blockSize.y / 2.0))
+	blockPolsT.append(Vector2(blockSize.x / 2.0, blockSize.y / 2.0))
+	blockPolsT.append(Vector2(-blockSize.x / 2.0, blockSize.y / 2.0))
+	
+	var wallTopShape = Polygon2D.new()
+	wallTopShape.set_pos(Vector2(startPos.x, startPos.y))
+	wallTop.add_child(wallTopShape)
+	wallTopShape.set_polygon(blockPolsT)
+	wallTopShape.set_color(blockColor)
+	# Collision
+	var blockPolsC = Vector2Array()
+	blockPolsT.append(Vector2(-blockSize.x / 2.0 + startPos.x, -blockSize.y / 2.0))
+	blockPolsT.append(Vector2(blockSize.x / 2.0 + startPos.x, -blockSize.y / 2.0))
+	blockPolsT.append(Vector2(blockSize.x / 2.0 + startPos.x, blockSize.y / 2.0))
+	blockPolsT.append(Vector2(-blockSize.x / 2.0 + startPos.x, blockSize.y / 2.0))
+	var collisionPolygonTop = ConvexPolygonShape2D.new()
+	collisionPolygonTop.set_points(blockPolsT)
+	wallTop.add_shape(collisionPolygonTop)
 	pass
 
 func updateCamera():
