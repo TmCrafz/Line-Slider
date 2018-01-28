@@ -49,7 +49,6 @@ class Block:
 
 onready var screenSize = get_viewport().get_rect().size
 var blockSize = Vector2(120, 120)
-var blockColor = Color(0.69, 0.09, 0.12)
 
 onready var wallTop = get_node("WallTop")
 onready var wallBottom = get_node("WallBottom")
@@ -60,9 +59,6 @@ func _ready():
 	wallTop.set_pos(Vector2(0, blockSize.y / 2.0))
 	wallBottom.set_pos(Vector2(0, screenSize.y - blockSize.y / 2.0))
 	for i in range(8):
-		blockColor.r = (randf()*11+1) / 10.0
-		blockColor.g = (randf()*11+1) / 10.0
-		blockColor.b = (randf()*11+1) / 10.0
 		createTopBlock()
 		createBottomBlock()
 	set_process(true)
@@ -71,9 +67,6 @@ func _ready():
 
 func _fixed_process(delta):
 	if isBlockSpawnNecessary():
-		blockColor.r = (randf()*11+1) / 10.0
-		blockColor.g = (randf()*11+1) / 10.0
-		blockColor.b = (randf()*11+1) / 10.0
 		removeBlocks()
 		createTopBlock()
 		createBottomBlock()
