@@ -18,8 +18,8 @@ func _ready():
 	blockColor = Color(0.69, 0.09, 0.12)
 	#var blockColor = Color(0.69, 0.89, 0.12)
 	# Create top block
-	wallTop = get_node("WallTop")
-	wallBottom = get_node("WallBottom")
+	wallTop = get_node("Wall/WallTop")
+	wallBottom = get_node("Wall/WallBottom")
 	wallTop.set_pos(Vector2(0, blockSize.y / 2.0))
 	wallBottom.set_pos(Vector2(0, screenSize.y - blockSize.y / 2.0))
 	for i in range(8):
@@ -54,7 +54,6 @@ func _fixed_process(delta):
 		removeBlocks()
 		createTopBlock()
 		createBottomBlock()
-		print("Spawn necessary")
 	pass
 
 # Remove the blocks which are most left
@@ -66,7 +65,7 @@ func removeBlocks():
 	pass
 
 func createTopBlock():
-	var wallNodes = get_node("WallTop").get_children()
+	var wallNodes = get_node("Wall/WallTop").get_children()
 	var startPos = Vector2(0, 0)
 	if !wallNodes.empty():
 		var lastWallNode = wallNodes.back()
@@ -75,7 +74,7 @@ func createTopBlock():
 	pass
 
 func createBottomBlock():
-	var wallNodes = get_node("WallBottom").get_children()
+	var wallNodes = get_node("Wall/WallBottom").get_children()
 	var startPos = Vector2(0, 0)
 	if !wallNodes.empty():
 		var lastWallNode = wallNodes.back()
@@ -107,7 +106,7 @@ func createBlock(startPos, wall):
 	pass
 
 func isBlockSpawnNecessary():
-	var wallNodes = get_node("WallTop").get_children()
+	var wallNodes = get_node("Wall/WallTop").get_children()
 	if (wallNodes.empty()):
 		return false
 	var center = wallNodes.size() / 2 - 1
