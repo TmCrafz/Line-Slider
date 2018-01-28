@@ -8,6 +8,8 @@ var wallTop
 var wallBottom
 var player
 
+onready var labelFps = get_node("Interface/Label_fps")
+
 func _ready():
 	screenSize = get_viewport_rect().size
 	player = get_node("Player")
@@ -40,6 +42,7 @@ func _ready():
 	set_fixed_process(true)
 	
 func _process(delta):
+	labelFps.set_text(str(OS.get_frames_per_second()))
 	pass
 
 func _fixed_process(delta):
