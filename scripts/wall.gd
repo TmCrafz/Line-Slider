@@ -105,7 +105,9 @@ func createBottomBlock():
 	pass
 
 func isBlockSpawnNecessary():
-	var wallNodes = get_node("WallTop").get_children()
+	# Here it no matter if we use the top or bottom wall, because count of blocks
+	# and there x pos are always the same
+	var wallNodes = wallTop.get_children()
 	if (wallNodes.empty()):
 		return false
 	var center = wallNodes.size() / 2 - 1

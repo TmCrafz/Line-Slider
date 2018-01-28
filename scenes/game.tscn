@@ -16,8 +16,6 @@ script/script = ExtResource( 2 )
 
 [node name="WallBottom" type="Node2D" parent="Wall"]
 
-[node name="WallBottom1" type="Node2D" parent="Wall"]
-
 [node name="Player" type="KinematicBody2D" parent="."]
 
 editor/display_folded = true
