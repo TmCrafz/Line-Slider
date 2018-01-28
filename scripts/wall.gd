@@ -1,5 +1,24 @@
 extends Node
 
+class Block:
+	enum TYPE{ FULL, EMPTY }
+	
+	var m_node
+	var m_type
+	
+	func setNode(node):
+		m_node = node
+		
+	func getNode():
+		return m_node
+	
+	func setType(type):
+		m_type = type
+	
+	func getType():
+		return m_type
+
+
 onready var screenSize = get_viewport().get_rect().size
 var blockSize = Vector2(120, 120)
 var blockColor = Color(0.69, 0.09, 0.12)
@@ -40,24 +59,29 @@ func removeBlocks():
 	pass
 
 func createTopBlock():
-	var wallNodes = get_node("WallTop").get_children()
+	var wallNodes = wallTop.get_children()
 	var startPos = Vector2(0, 0)
 	if !wallNodes.empty():
 		var lastWallNode = wallNodes.back()
 		startPos.x += lastWallNode.get_pos().x + blockSize.x
-	createBlock(startPos, wallTop)
+	var blockNew = createBlock()
+	blockNew.getNode().set_pos(startPos)
+	wallTop.add_child(blockNew.getNode())
 	pass
 
 func createBottomBlock():
-	var wallNodes = get_node("WallBottom").get_children()
+	var wallNodes = wallBottom.get_children()
 	var startPos = Vector2(0, 0)
 	if !wallNodes.empty():
 		var lastWallNode = wallNodes.back()
 		startPos.x += lastWallNode.get_pos().x + blockSize.x
-	createBlock(startPos, wallBottom)
+	var blockNew = createBlock()
+	blockNew.getNode().set_pos(startPos)
+	wallBottom.add_child(blockNew.getNode())
 	pass
 
-func createBlock(startPos, wall):
+func createBlock():
+	var blockBody = StaticBody2D.new()
 	var blockPols = Vector2Array()
 	blockPols.append(Vector2(-blockSize.x / 2.0, -blockSize.y / 2.0))
 	blockPols.append(Vector2(blockSize.x / 2.0, -blockSize.y / 2.0))
@@ -65,20 +89,25 @@ func createBlock(startPos, wall):
 	blockPols.append(Vector2(-blockSize.x / 2.0, blockSize.y / 2.0))
 	
 	var wallShape = Polygon2D.new()
-	wallShape.set_pos(Vector2(startPos.x, 0))
-	wall.add_child(wallShape)
+	wallShape.set_pos(Vector2(0, 0))
+	blockBody.add_child(wallShape)
 	wallShape.set_polygon(blockPols)
 	wallShape.set_color(blockColor)
 	# Collision
 	var blockPolsC = Vector2Array()
-	blockPolsC.append(Vector2(-blockSize.x / 2.0 + startPos.x, -blockSize.y / 2.0))
-	blockPolsC.append(Vector2(blockSize.x / 2.0 + startPos.x, -blockSize.y / 2.0))
-	blockPolsC.append(Vector2(blockSize.x / 2.0 + startPos.x, blockSize.y / 2.0))
-	blockPolsC.append(Vector2(-blockSize.x / 2.0 + startPos.x, blockSize.y / 2.0))
+	blockPolsC.append(Vector2(-blockSize.x / 2.0, -blockSize.y / 2.0))
+	blockPolsC.append(Vector2(blockSize.x / 2.0, -blockSize.y / 2.0))
+	blockPolsC.append(Vector2(blockSize.x / 2.0, blockSize.y / 2.0))
+	blockPolsC.append(Vector2(-blockSize.x / 2.0, blockSize.y / 2.0))
 	var collisionPolygon = ConvexPolygonShape2D.new()
 	collisionPolygon.set_points(blockPolsC)
-	wall.add_shape(collisionPolygon)
-	pass
+	blockBody.add_shape(collisionPolygon)
+	
+	var block = Block.new()
+	block.setNode(blockBody)
+	block.setType(Block.TYPE.FULL)
+	
+	return block
 
 func isBlockSpawnNecessary():
 	var wallNodes = get_node("WallTop").get_children()
