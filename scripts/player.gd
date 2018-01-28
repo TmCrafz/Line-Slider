@@ -34,6 +34,10 @@ func _process(delta):
 		playerDirection.y = 1.0
 	elif(Input.is_action_pressed("move_up")):
 		playerDirection.y = -1.0
+#	var playerShape = get_node("Shape")
+#	var curColor = playerShape.get_color()
+#	playerShape.set_color(curColor.linear_interpolate(Color(0.8, 0.2, 0.6, 1.0), delta))
+
 
 func _fixed_process(delta):
 	var motion = Vector2(0, 0)
