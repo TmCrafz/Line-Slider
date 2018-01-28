@@ -6,7 +6,8 @@ class Block:
 	var m_body
 	var m_type
 	
-	func create(blockSize):
+	# Create a block of type FULL
+	func _createFull(blockSize):
 		var blockColor = Color(1.0, 1.0, 1.0, 1.0)
 		blockColor.r = (randf()*11+1) / 10.0
 		blockColor.g = (randf()*11+1) / 10.0
@@ -18,7 +19,7 @@ class Block:
 		blockPols.append(Vector2(blockSize.x / 2.0, -blockSize.y / 2.0))
 		blockPols.append(Vector2(blockSize.x / 2.0, blockSize.y / 2.0))
 		blockPols.append(Vector2(-blockSize.x / 2.0, blockSize.y / 2.0))
-	
+		
 		var wallShape = Polygon2D.new()
 		wallShape.set_pos(Vector2(0, 0))
 		m_body.add_child(wallShape)
@@ -34,6 +35,19 @@ class Block:
 		collisionPolygon.set_points(blockPolsC)
 		m_body.add_shape(collisionPolygon)
 		setType(TYPE.FULL)
+	
+	func _createEmpty(blockSize):
+		m_body = StaticBody2D.new()
+		setType(TYPE.EMPTY)
+	
+	func create(blockSize):
+		# Random number between 1 and 3
+		var rand = randi() % 3 + 1
+		print("Rand: " + str(rand))
+		if rand == 1 || rand == 2 || rand == 3:
+			_createFull(blockSize)
+		else:
+			_createEmpty(blockSize)
 	
 	func setBody(body):
 		m_body = body
